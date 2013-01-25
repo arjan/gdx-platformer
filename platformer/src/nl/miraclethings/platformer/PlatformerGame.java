@@ -110,6 +110,7 @@ public class PlatformerGame implements ApplicationListener {
         
         debugRenderer = new Box2DDebugRenderer();  
 		
+       World.setVelocityThreshold(0.0f);
 	}
 
 	@Override
@@ -120,6 +121,7 @@ public class PlatformerGame implements ApplicationListener {
 
 	@Override
 	public void render() {		
+		
 		Gdx.gl.glClearColor(0, 0.7f, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
@@ -130,7 +132,7 @@ public class PlatformerGame implements ApplicationListener {
 		sprite.setRotation((float)(ball.getAngle() * 180/Math.PI));
 		sprite.draw(batch);
 		batch.end();
-		//debugRenderer.render(world, camera.combined);
+		debugRenderer.render(world, camera.combined);
 		world.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);  
 	}
 
@@ -147,13 +149,19 @@ public class PlatformerGame implements ApplicationListener {
 	}
 
 	public void randomMovement(int x, int y) {
-		double r = Math.random() * Math.PI;
+		double r = 0.5 * Math.PI; //1.0; //Math.random() * Math.PI;
 		float scale = 100000000000000f;
 		ball.applyForceToCenter(new Vector2((float)(scale * Math.cos(r)), 
 											(float)(scale * Math.sin(r))
 											));
 		//Gdx.app.log("MyTag", "my informative message");
 		//
-
+	}
+	
+	public void move(float dir) {
+		Gdx.app.log("hello", "foo");
+		float f = 100000000f * dir;
+		Vector2 p = ball.getPosition();
+		ball.applyLinearImpulse(f, 0f, p.x, p.y + 2); 
 	}
 }

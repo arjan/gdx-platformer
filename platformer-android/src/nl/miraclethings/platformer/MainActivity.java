@@ -15,4 +15,4 @@ public class MainActivity extends AndroidApplication {
         
         initialize(new PlatformerGame(), cfg);
     }
-}  
+}   
