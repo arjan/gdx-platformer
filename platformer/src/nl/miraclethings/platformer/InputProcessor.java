@@ -15,11 +15,11 @@ public class InputProcessor implements com.badlogic.gdx.InputProcessor {
 		// TODO Auto-generated method stub
 		switch (keycode) {
 		case Input.Keys.LEFT:
-			game.move(-1);
+			//game.move(-1);
 			return true;
 			
 		case Input.Keys.RIGHT:
-			game.move(1);
+			//game.move(1);
 			return true;
 			
 		}
@@ -29,7 +29,7 @@ public class InputProcessor implements com.badlogic.gdx.InputProcessor {
 	@Override
 	public boolean keyUp(int keycode) {
 		// TODO Auto-generated method stub
-		game.move(0);
+		//game.move(0);
 		return true;
 	}
 
@@ -42,7 +42,7 @@ public class InputProcessor implements com.badlogic.gdx.InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		// TODO Auto-generated method stub
-		game.randomMovement(screenX, screenY);
+		//game.randomMovement(screenX, screenY);
 		return true;
 	}
 
