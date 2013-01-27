@@ -2,7 +2,6 @@ package nl.miraclethings.platformer;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,10 +9,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
  
 public class PlatformerGame extends InputAdapter implements ApplicationListener {
  
@@ -22,7 +21,6 @@ public class PlatformerGame extends InputAdapter implements ApplicationListener 
 
 	OrthographicCamera cam;
 	Box2DDebugRenderer renderer;
-	Array<MovingPlatform> platforms = new Array<MovingPlatform>();
 
 	SpriteBatch batch;
 	BitmapFont font;
@@ -43,15 +41,6 @@ public class PlatformerGame extends InputAdapter implements ApplicationListener 
 		level = new GameLevel("data/world");
 		world = level.getWorld();
 		
-/*
-		float y1 = 1; //(float)Math.random() * 0.1f + 1;
-		float y2 = y1;
-		for(int i = 0; i < 50; i++) {
-			Body ground = createEdge(BodyType.StaticBody, -50 + i * 2, y1, -50 + i * 2 + 2, y2, 0);			
-			y1 = y2;
-			y2 = (float)Math.random() + 1;
-		}			
- */
 		/*
 		Body box = createBox(BodyType.StaticBody, 1, 1, 0);
 		box.setTransform(30, 3, 0);
@@ -61,23 +50,18 @@ public class PlatformerGame extends InputAdapter implements ApplicationListener 
 		
 		player = new Player(world);
 	
-//		playerObject = player.getPlayerBody();
 		
- /*
-		for(int i = 0; i < 10; i++) {
-			box = createBox(BodyType.DynamicBody, (float)Math.random(), (float)Math.random(), 3);
-			box.setTransform((float)Math.random() * 10f - (float)Math.random() * 10f, (float)Math.random() * 10 + 6, (float)(Math.random() * 2 * Math.PI));
+		Body box;
+		for(int i = 0; i < 40; i++) {
+			box = WorldUtil.createBox(world, BodyType.DynamicBody, (float)Math.random(), (float)Math.random(), 3);
+			box.setTransform((float)Math.random() * 100f - (float)Math.random() * 10f, (float)Math.random() * 10 + 6, (float)(Math.random() * 2 * Math.PI));
 		}
- 
+/* 
 		for(int i = 0; i < 10; i++) {
 			Body circle = createCircle(BodyType.DynamicBody, (float)Math.random() * 0.5f, 3);
 			circle.setTransform((float)Math.random() * 10f - (float)Math.random() * 10f, (float)Math.random() * 10 + 6, (float)(Math.random() * 2 * Math.PI));
 		}
  */
-		platforms.add(new MovingPlatform(world, -2, 3, 2, 0.5f, 2, 0, 4));
-		platforms.add(new MovingPlatform(world, 17, 3, 5, 0.5f, 0, 2, 5));		
-		platforms.add(new MovingPlatform(world, -7, 5, 2, 0.5f, -2, 2, 8));		
-		platforms.add(new MovingPlatform(world, 40, 3, 20, 0.5f, 0, 2, 5));
 		
 	}
  
@@ -91,29 +75,19 @@ public class PlatformerGame extends InputAdapter implements ApplicationListener 
 	public void render() {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		Vector2 pos = player.getPosition();
 		// Update the camera
-		cam.position.set(player.getPosition().x, player.getPosition().y, 0);
+		cam.position.set(pos.x, pos.y, 0);
+		cam.zoom = 1;
 		cam.update();
 		cam.apply(Gdx.gl10);
-		renderer.render(world, cam.combined);
- 
+		 
 		// Update the player position, etc
 		player.update();
- 
-		// update platforms
-		for(int i = 0; i < platforms.size; i++) {
-			MovingPlatform platform = platforms.get(i);
-			platform.update(Math.max(1/30.0f, Gdx.graphics.getDeltaTime()));
-		}
- 
-		// le step...			
-		world.step(Gdx.graphics.getDeltaTime(), 4, 4);
-				
- 
-//		cam.project(point.set(pos.x, pos.y, 0));
-//		batch.begin();
-//		font.drawMultiLine(batch, "friction: " + playerPhysicsFixture.getFriction() + "\ngrounded: " + grounded, point.x+20, point.y);
-//		batch.end();
+		
+		level.update(cam);
+
+		renderer.render(world, cam.combined);
 	}	
  
 	@Override
