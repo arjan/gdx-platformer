@@ -90,11 +90,14 @@ public class PlatformerGame extends InputAdapter implements ApplicationListener 
 	@Override
 	public void render() {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
+		// Update the camera
 		cam.position.set(player.getPosition().x, player.getPosition().y, 0);
 		cam.update();
 		cam.apply(Gdx.gl10);
 		renderer.render(world, cam.combined);
  
+		// Update the player position, etc
 		player.update();
  
 		// update platforms
