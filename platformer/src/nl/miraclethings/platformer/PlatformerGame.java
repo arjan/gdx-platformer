@@ -2,6 +2,7 @@ package nl.miraclethings.platformer;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -48,7 +49,7 @@ public class PlatformerGame extends InputAdapter implements ApplicationListener 
 		box.setTransform(5, 2.4f, 0);
 		*/
 		
-		player = new Player(world);
+		player = new Player(level);
 	
 		
 		Body box;
@@ -65,7 +66,6 @@ public class PlatformerGame extends InputAdapter implements ApplicationListener 
 		
 	}
  
- 
 	@Override
 	public void resume() {
  
@@ -73,6 +73,7 @@ public class PlatformerGame extends InputAdapter implements ApplicationListener 
  
 	@Override
 	public void render() {
+		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		Vector2 pos = player.getPosition();
@@ -107,6 +108,9 @@ public class PlatformerGame extends InputAdapter implements ApplicationListener 
  
 	@Override
 	public boolean keyDown(int keycode) {
+		if (keycode == Input.Keys.ESCAPE) 
+			Gdx.app.exit();
+		
 		player.keyDown(keycode);
 		return false;
 	}

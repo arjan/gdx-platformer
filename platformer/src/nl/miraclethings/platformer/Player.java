@@ -29,12 +29,13 @@ public class Player {
 	float stillTime = 0;
 	long lastGroundTime = 0;
 
-	public Player(World world) {
-		this.world = world;
+	public Player(GameLevel level) {
+		this.world = level.getWorld();
 
 		createPlayer();
 
-		body.setTransform(10.0f, 4.0f, 0);
+		Vector2 origin = level.getPlayerOrigin();
+		body.setTransform(origin.x, origin.y, 0);
 		body.setFixedRotation(true);
 	}
 
