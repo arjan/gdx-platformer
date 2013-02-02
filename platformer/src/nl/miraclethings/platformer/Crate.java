@@ -3,6 +3,7 @@ package nl.miraclethings.platformer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -23,8 +24,9 @@ public class Crate {
 		
 		Gdx.app.log("x", "s: " + scale);
 		Texture texture = new Texture(Gdx.files.internal("data/crate.png"));
+		TextureRegion region = new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight());
 		
-		sprite = new Sprite(texture, texture.getWidth(), texture.getHeight());
+		sprite = new Sprite(region);
 		
 		
 //		sprite.setOrigin(1f, 1f);
@@ -56,11 +58,9 @@ public class Crate {
 		float h = sprite.getHeight() * scale;
 		float a = body.getAngle();
 		
-		sprite.setPosition(v.x, v.y);
-		sprite.setOrigin(0, 0);
+		sprite.setPosition(v.x-0.5f, v.y-0.5f);
+		sprite.setOrigin(0.5f, 0.5f);
 		sprite.setRotation(MathUtils.radiansToDegrees * body.getAngle());
-		sprite.translateX(-0.5f * MathUtils.cos(a));
-		sprite.translateY(-0.5f * MathUtils.sin(a));
 		
 //		sprite.setOrigin(0f, 0f);
 		
