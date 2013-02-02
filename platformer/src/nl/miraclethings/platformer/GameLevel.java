@@ -29,11 +29,12 @@ public class GameLevel {
 	public World world;
 	private String levelname;
 	Array<MovingPlatform> platforms;
+	Array<Crate> crates;
 
 	int width;
 	int height;
 	private SpriteBatch batch;
-	private Sprite sprite;
+	private Sprite background;
 	private Vector2 playerOrigin;
 
 	static float SCALE = 0.02f;
@@ -56,16 +57,29 @@ public class GameLevel {
 		platforms.add(new MovingPlatform(world, 40, 3, 20, 0.5f, 0, 2, 5));
 
 		batch = new SpriteBatch();
+		
+		this.crates = new Array<Crate>();
+		for(int i = 0; i < 40; i++) {
+			Crate crate = new Crate(this);
+//			crate.getBody().setTransform((float)Math.random() * 100f - (float)Math.random() * 10f, (float)Math.random() * 10 + 6, 0);//(float)(Math.random() * 2 * Math.PI));
+			crate.getBody().setTransform(i, 20, 0);//(float)(Math.random() * 2 * Math.PI));
+			this.crates.add(crate);
+		}
+		
 
 		loadBitmaps();
 	}
 
+	public float getScale() {
+		return SCALE;
+	}
 	private void loadBitmaps() {
 
 		Texture texture = new Texture(Gdx.files.internal(levelname + ".png"));
-		sprite = new Sprite(texture, width, height);
-		sprite.setOrigin(0, 0);
-		sprite.setScale(SCALE, SCALE);
+		
+		background = new Sprite(texture, width, height);
+		background.setOrigin(0, 0);
+		background.setScale(SCALE, SCALE);
 		// sprite.setPosition(0, -10);
 		// sprite.set
 	}
@@ -123,7 +137,7 @@ public class GameLevel {
 				Float.parseFloat(originRect.attr("y")) * SCALE
 			);
  
-		// fixme -- constrain the world with boxes so we dont fall off
+		// fixme -- constrain the world with boxes so we dont fall off?
 	}
 
 	public World getWorld() {
@@ -134,15 +148,21 @@ public class GameLevel {
 
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
-		sprite.draw(batch);
-		batch.end();
+		background.draw(batch);
 
 		// update platforms
 		for (int i = 0; i < platforms.size; i++) {
 			MovingPlatform platform = platforms.get(i);
 			platform.update(Math.max(1 / 30.0f, Gdx.graphics.getDeltaTime()));
 		}
+		
+		for (Crate c : crates) {
+			c.update();
+			c.getSprite().draw(batch);
+		}
 
+		batch.end();
+		
 		// step the world
 		world.step(Gdx.graphics.getDeltaTime(), 4, 4);
 	}

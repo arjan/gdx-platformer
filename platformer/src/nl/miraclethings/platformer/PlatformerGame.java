@@ -50,19 +50,6 @@ public class PlatformerGame extends InputAdapter implements ApplicationListener 
 		*/
 		
 		player = new Player(level);
-	
-		
-		Body box;
-		for(int i = 0; i < 40; i++) {
-			box = WorldUtil.createBox(world, BodyType.DynamicBody, (float)Math.random(), (float)Math.random(), 3);
-			box.setTransform((float)Math.random() * 100f - (float)Math.random() * 10f, (float)Math.random() * 10 + 6, (float)(Math.random() * 2 * Math.PI));
-		}
-/* 
-		for(int i = 0; i < 10; i++) {
-			Body circle = createCircle(BodyType.DynamicBody, (float)Math.random() * 0.5f, 3);
-			circle.setTransform((float)Math.random() * 10f - (float)Math.random() * 10f, (float)Math.random() * 10 + 6, (float)(Math.random() * 2 * Math.PI));
-		}
- */
 		
 	}
  
