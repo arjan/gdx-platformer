@@ -38,6 +38,7 @@ public class GameLevel {
 	private Vector2 playerOrigin;
 	private Sprite testSprite;
 	private Body testBody;
+	private AnimatedObject animatedThing;
 
 	static float SCALE = 0.02f;
 	static float SCALE_INV = 50f;
@@ -63,7 +64,10 @@ public class GameLevel {
 			Crate crate = new Crate(this);
 			crate.getBody().setTransform((float)Math.random() * 100f, (float)Math.random() * 10 + 6, 0);//(float)(Math.random() * 2 * Math.PI));
 			this.crates.add(crate);
-		}		
+		}
+		
+		animatedThing = new AnimatedObject(this);
+		animatedThing.getBody().setTransform(10f,  10f, 0);
 
 		loadBitmaps();
 	}
@@ -155,6 +159,10 @@ public class GameLevel {
 			c.update();
 			c.getSprite().draw(batch);
 		}
+		
+		animatedThing.update();
+		animatedThing.getSprite().draw(batch);
+		
 
 		batch.end();
 		
