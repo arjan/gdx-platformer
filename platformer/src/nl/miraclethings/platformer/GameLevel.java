@@ -149,8 +149,7 @@ public class GameLevel {
 		background.draw(batch);
 
 		// update platforms
-		for (int i = 0; i < platforms.size; i++) {
-			MovingPlatform platform = platforms.get(i);
+		for (MovingPlatform platform : platforms) {
 			platform.update(Math.max(1 / 30.0f, Gdx.graphics.getDeltaTime()));
 		}
 
