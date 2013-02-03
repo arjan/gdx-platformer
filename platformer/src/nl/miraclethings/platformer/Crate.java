@@ -18,30 +18,22 @@ public class Crate {
 	public Crate(GameLevel level) {
 		scale = level.getScale();
 		this.level = level;
-		
-		//scale *= (0.9 + 0.5 * Math.random());
-		scale = 1/256f;
-		
-		Gdx.app.log("x", "s: " + scale);
+
+		// Laad texture in en maak er een sprite van
 		Texture texture = new Texture(Gdx.files.internal("data/crate.png"));
 		TextureRegion region = new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight());
-		
 		sprite = new Sprite(region);
+
+		// Transformeer de grootte van de box naar game units (1x1)
+		scale = 1/sprite.getWidth();
+		// Varieer een beetje, voor de gein
+		scale *= (0.4 + 1.4 * Math.random());
 		
-		
-//		sprite.setOrigin(1f, 1f);
-//		sprite.setOrigin(0, 0);
-//		sprite.setScale(2*scale, 2*scale);
 		sprite.setScale(scale, scale);
-//		sprite.setOrigin(0.5f, 0.5f);//, 0);
-//		sprite.setOrigin(-0.5f, -0.5f);
-//		Gdx.app.log("x", "s: " + sprite.getWidth());
 		
 		this.body = WorldUtil.createBox(level.getWorld(), BodyType.DynamicBody, 
 				0.5f * sprite.getWidth() * scale, 
 				0.5f * sprite.getHeight() * scale, 3);
-//		this.body.setFixedRotation(true);
-		
 	}
 	
 	public Body getBody() {
@@ -52,18 +44,16 @@ public class Crate {
 		return sprite;
 	}
 	
+	/**
+	 * Pas de positie en rotatie van de sprite aan aan die van het physics model
+	 */
 	public void update() {
 		Vector2 v = body.getPosition();
-		float w = sprite.getWidth() * scale;
-		float h = sprite.getHeight() * scale;
-		float a = body.getAngle();
+		float w = sprite.getWidth();
+		float h = sprite.getHeight();
 		
-		sprite.setPosition(v.x-0.5f, v.y-0.5f);
-		sprite.setOrigin(0.5f, 0.5f);
+		sprite.setPosition(v.x-0.5f * w, v.y - 0.5f * h);
 		sprite.setRotation(MathUtils.radiansToDegrees * body.getAngle());
-		
-//		sprite.setOrigin(0f, 0f);
-		
 	}
 	
 }

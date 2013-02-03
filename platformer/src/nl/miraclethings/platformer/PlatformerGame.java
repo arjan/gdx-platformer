@@ -73,9 +73,10 @@ public class PlatformerGame extends InputAdapter implements ApplicationListener 
 		// Update the player position, etc
 		player.update();
 		
+		renderer.render(world, cam.combined);
+
 		level.update(cam);
 
-		renderer.render(world, cam.combined);
 	}	
  
 	@Override

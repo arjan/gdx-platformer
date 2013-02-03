@@ -11,11 +11,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
@@ -31,11 +36,11 @@ public class GameLevel {
 	private SpriteBatch batch;
 	private Sprite background;
 	private Vector2 playerOrigin;
+	private Sprite testSprite;
+	private Body testBody;
 
 	static float SCALE = 0.02f;
 	static float SCALE_INV = 50f;
-
-	// public Array<Rectangle> rectangles;
 
 	public GameLevel(String levelname) {
 
@@ -56,11 +61,9 @@ public class GameLevel {
 		this.crates = new Array<Crate>();
 		for(int i = 0; i < 40; i++) {
 			Crate crate = new Crate(this);
-//			crate.getBody().setTransform((float)Math.random() * 100f - (float)Math.random() * 10f, (float)Math.random() * 10 + 6, 0);//(float)(Math.random() * 2 * Math.PI));
-			crate.getBody().setTransform(i, 20, 0);//(float)(Math.random() * 2 * Math.PI));
+			crate.getBody().setTransform((float)Math.random() * 100f, (float)Math.random() * 10 + 6, 0);//(float)(Math.random() * 2 * Math.PI));
 			this.crates.add(crate);
-		}
-		
+		}		
 
 		loadBitmaps();
 	}
@@ -70,13 +73,11 @@ public class GameLevel {
 	}
 	private void loadBitmaps() {
 
+		// De background texture
 		Texture texture = new Texture(Gdx.files.internal(levelname + ".png"));
-		
 		background = new Sprite(texture, width, height);
 		background.setOrigin(0, 0);
 		background.setScale(SCALE, SCALE);
-		// sprite.setPosition(0, -10);
-		// sprite.set
 	}
 
 	protected void loadGeometry() {
@@ -131,9 +132,7 @@ public class GameLevel {
 				Float.parseFloat(originRect.attr("x"))* SCALE, 
 				Float.parseFloat(originRect.attr("y")) * SCALE
 			);
- 
-		// fixme -- constrain the world with boxes so we dont fall off?
-	}
+ 	}
 
 	public World getWorld() {
 		return this.world;
@@ -150,7 +149,8 @@ public class GameLevel {
 			MovingPlatform platform = platforms.get(i);
 			platform.update(Math.max(1 / 30.0f, Gdx.graphics.getDeltaTime()));
 		}
-		
+
+		// update the crates
 		for (Crate c : crates) {
 			c.update();
 			c.getSprite().draw(batch);
